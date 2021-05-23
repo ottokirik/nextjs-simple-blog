@@ -10,7 +10,10 @@ const Hero = () => {
         <Image src="/images/site/max.png" alt="" width={300} height={300} />
       </div>
       <h1>Hi, I'm Max</h1>
-      <p>Some text</p>
+      <p>
+        Aut delectus suscipit assumenda quidem sed expedita nihil perferendis
+        et.
+      </p>
     </section>
   );
 };
