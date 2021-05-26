@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
-import classess from 'components/home-page/hero.module.css';
+import classes from 'components/home-page/hero.module.css';
 
 const Hero = () => {
-  const { hero, image } = classess;
+  const { hero, image } = classes;
   return (
     <section className={hero}>
       <div className={image}>

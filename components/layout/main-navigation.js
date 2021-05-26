@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { Logo } from 'components/layout/logo';
 
-import classess from 'components/layout/main-navigation.module.css';
+import classes from 'components/layout/main-navigation.module.css';
 
 const MainNavigation = () => {
-  const { header } = classess;
+  const { header } = classes;
   return (
     <header className={header}>
       <Link href="/">
