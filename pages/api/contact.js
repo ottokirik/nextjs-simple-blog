@@ -1,3 +1,12 @@
+import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path: './.env',
+});
+
+const DB = process.env.DB.replace('<password>', process.env.DB_PASSWORD);
+
 const isInvalidInput = (email, name, message) => {
   return (
     !email ||
@@ -9,7 +18,7 @@ const isInvalidInput = (email, name, message) => {
   );
 };
 
-export default (req, res) => {
+export default async (req, res) => {
   if (req.method !== 'POST') return;
 
   const { email, name, message } = req.body;
@@ -20,6 +29,27 @@ export default (req, res) => {
   }
 
   const newMessage = { email, name, message };
+
+  let client;
+
+  try {
+    client = await MongoClient.connect(DB);
+  } catch (error) {
+    res.status(500).json({ message: 'Could not connect to database.' });
+    return;
+  }
+
+  const db = client.db();
+
+  try {
+    db.collection('messages').insertOne(newMessage);
+  } catch (error) {
+    client.close();
+    res.status(500).json({ message: 'Storing message failed.' });
+    return;
+  }
+
+  client.close();
 
   res.status(201).json({ message: 'Successfully stored message.' });
 };
