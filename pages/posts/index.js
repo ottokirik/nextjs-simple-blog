@@ -1,8 +1,17 @@
+import Head from 'next/head';
+
 import { AllPosts } from 'components/posts/all-posts';
 import { getAllPosts } from 'lib/posts-util';
 
 const AllPostsPage = ({ posts }) => {
-  return <AllPosts posts={posts} />;
+  return (
+    <>
+      <Head>
+        <title>All Posts :: Max' Blog</title>
+      </Head>
+      <AllPosts posts={posts} />
+    </>
+  );
 };
 
 export const getStaticProps = () => {

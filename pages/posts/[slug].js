@@ -1,8 +1,17 @@
+import Head from 'next/head';
+
 import { PostContent } from 'components/posts/post-detail/post-content';
 import { getPostData, getPostFiles } from 'lib/posts-util';
 
 const PostDetailPage = ({ post }) => {
-  return <PostContent post={post} />;
+  return (
+    <>
+      <Head>
+        <title>{post.title} :: Max' Blog</title>
+      </Head>
+      <PostContent post={post} />
+    </>
+  );
 };
 
 export const getStaticProps = ({ params: { slug } }) => {

@@ -1,23 +1,67 @@
 import classes from 'components/contact/contact-form.module.css';
-import { useState } from 'react';
+import {
+  NotificationContext,
+  NOTIFICATION_STATUS,
+} from 'context/notification-context';
+import { useContext, useState } from 'react';
+
+const sendContactData = async (contactDetails) => {
+  const response = await fetch('/api/contact', {
+    method: 'POST',
+    body: JSON.stringify(contactDetails),
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Something went wrong.');
+  }
+};
 
 export const ContactForm = () => {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredName, setEnteredName] = useState('');
   const [enteredMessage, setEnteredMessage] = useState('');
+  const [disabled, setDisabled] = useState(false);
+  const { showNotification } = useContext(NotificationContext);
 
-  const sendMessageHandler = (event) => {
+  const sendMessageHandler = async (event) => {
     event.preventDefault();
+    setDisabled(true);
 
-    fetch('/api/contact', {
-      method: 'POST',
-      body: JSON.stringify({
+    showNotification({
+      status: NOTIFICATION_STATUS.pending,
+      title: 'Sending message...',
+      message: 'Your message is on its way.',
+    });
+
+    try {
+      await sendContactData({
         email: enteredEmail,
         name: enteredName,
         message: enteredMessage,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    });
+      });
+
+      showNotification({
+        status: NOTIFICATION_STATUS.success,
+        title: 'Success!',
+        message: 'Message send successfully!',
+      });
+
+      setEnteredEmail('');
+      setEnteredName('');
+      setEnteredMessage('');
+
+      setDisabled(false);
+    } catch (error) {
+      showNotification({
+        status: NOTIFICATION_STATUS.error,
+        title: 'Error!',
+        message: error.message,
+      });
+      setDisabled(false);
+    }
   };
 
   return (
@@ -58,7 +102,9 @@ export const ContactForm = () => {
         </div>
 
         <div className={classes.actions}>
-          <button type="submit">Send Message</button>
+          <button type="submit" disabled={disabled}>
+            Send Message
+          </button>
         </div>
       </form>
     </section>
