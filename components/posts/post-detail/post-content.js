@@ -1,10 +1,13 @@
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { xonokai } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import js from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
 
 import classes from 'components/posts/post-detail/post-content.module.css';
 import { PostHeader } from './post-header';
+
+SyntaxHighlighter.registerLanguage('javascript', js);
 
 const PostContent = ({ post }) => {
   const imagePath = `/images/posts/${post.slug}`;
